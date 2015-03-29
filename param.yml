@@ -1,0 +1,8 @@
+vpc_id:  vpc-xxxxxx
+subnet_id:  subnet-xxxxxx
+availability_zone:  ap-northeast-1c
+ssh_keypair_name:  myssh
+ec2_ami_id:  ami-cbf90ecb
+security_groups:
+  - default
+
