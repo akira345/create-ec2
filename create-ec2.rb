@@ -32,7 +32,7 @@ opts.on("-s","--volume_size VOLUME_SIZE") do |size|
   volume_size = size
 end
 device_name = nil
-opts.on("-d","--device_name DEVICE_NAME") do |device|
+opts.on("-d","--device_name ROOT_DEVICE_NAME") do |device|
   device_name = device
 end
 hostname = nil
@@ -44,6 +44,13 @@ opts.on("-e","--elastic_ip ELASTIC_IP") do |eip|
   public_ip = eip
 end
 opts.parse!(ARGV)
+
+# パラメタチェック
+raise "Option instance_type Required!" if (instance_type == nil)
+raise "Option private_ip Required!" if (private_ip == nil)
+raise "Option volume_size Required!" if (volume_size == nil)
+raise "Option device_name Required!" if (device_name == nil)
+raise "Option hostname Required!" if (hostname == nil)
 
 #debug
 #instance_type= "t2.micro"
@@ -135,6 +142,23 @@ if ary_ips.include?(private_ip)
   exit 1
 end
 
+#すでに割り当て済みEIPが使用されていないかチェック
+eip_association_id = ec2.describe_addresses({
+  filters: [
+      { 
+        name: "domain",
+        values: ["vpc"],
+      },
+      {
+        name: "public-ip",
+        values: [public_ip]
+      },
+  ]
+}).addresses[0].association_id
+if !eip_association_id.nil?
+  pp "already associated EIP!"
+  exit 1
+end
 
 # AMIから新規マシンを作成。
 pp "create"
@@ -218,6 +242,4 @@ ec2.associate_address({
 })
 
 pp "OK"
-
-
 
