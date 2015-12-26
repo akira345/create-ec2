@@ -15,7 +15,6 @@ ec2=Aws::EC2::Client.new(
   region:ec2_region
 )
 
-
 #　引数
 opts = OptionParser.new
 instance_type = nil
