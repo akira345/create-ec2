@@ -15,7 +15,6 @@ ec2 = AWS::EC2.new(
   :ec2_endpoint => ec2_region
 )
 
-
 #　引数
 opts = OptionParser.new
 instance_type = nil
@@ -24,15 +23,15 @@ opts.on("-t","--instance_type INSTANCE_TYPE") do |type|
   instance_type = type
 end
 private_ip = nil
-opts.on("-ip","--private_ip PRIVATE_IP") do |ip|
+opts.on("-i","--private_ip PRIVATE_IP") do |ip|
   private_ip = ip
 end
 volume_size = nil
-opts.on("-size","--volume_size VOLUME_SIZE") do |size|
+opts.on("-s","--volume_size VOLUME_SIZE") do |size|
   volume_size = size
 end
 device_name = nil
-opts.on("-device","--device_name DEVICE_NAME") do |device|
+opts.on("-d","--device_name DEVICE_NAME") do |device|
   device_name = device
 end
 hostname = nil
@@ -40,9 +39,10 @@ opts.on("-h","--hostname HOSTNAME") do |host|
   hostname = host
 end
 public_ip = nil
-opts.on("-eip","--public_ip PUBLIC_IP") do |eip|
+opts.on("-e","--elastic_ip ELASTIC_IP") do |eip|
   public_ip = eip
 end
+opts.parse!(ARGV)
 
 #debug
 #instance_type= "t2.micro"
